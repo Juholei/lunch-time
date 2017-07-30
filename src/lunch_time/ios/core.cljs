@@ -1,6 +1,8 @@
 (ns lunch-time.ios.core
   (:require [reagent.core :as r :refer [atom]]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
+            [cljs-time.core :as time]
+            [cljs-time.format :as time-format]
             [lunch-time.events]
             [lunch-time.subs]))
 
@@ -14,6 +16,8 @@
 
 (def logo-img (js/require "./images/cljs.png"))
 
+(def format (time-format/formatter "hh:mm"))
+
 (defn alert [title]
       (.alert (.-Alert ReactNative) title))
 
@@ -25,18 +29,21 @@
         end-time (subscribe [:get-end-time])]
     (fn []
       [view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
-       [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Went to lunch at " @start-time]
-       [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Came back from lunch at " @end-time]
+       (when @start-time
+         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Went to lunch at " (time-format/unparse format @start-time)])
+       (when @end-time
+         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Came back from lunch at " (time-format/unparse format @end-time)])
        (when (lunch-complete? start-time end-time)
-         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "You were at lunch for " (- @end-time @start-time) " milliseconds"])
+         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "You were at lunch for " (time/in-minutes (time/interval @start-time @end-time)) " minutes"])
        [image {:source logo-img
                :style  {:width 80 :height 80 :margin-bottom 30}}]
-       (if (and (= nil @start-time))
+       (when (= nil @start-time)
          [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
-                               :on-press #(dispatch [:set-start-time (.getTime (js/Date.))])}
-          [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "Lunch time!"]]
+                               :on-press #(dispatch [:set-start-time (time/now)])}
+          [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "Lunch time!"]])
+       (when (and @start-time (= @end-time nil))
          [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
-                               :on-press #(dispatch [:set-end-time (.getTime (js/Date.))])}
+                               :on-press #(dispatch [:set-end-time (time/now)])}
           [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "Back to work!"]])
        (when (lunch-complete? start-time end-time)
          [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}

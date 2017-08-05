@@ -15,7 +15,7 @@
 
 (def logo-img (js/require "./images/cljs.png"))
 
-(def format (time-format/formatter "hh:mm"))
+(def format (time-format/formatter "HH:mm"))
 
 (defn- lunch-complete? [start-time end-time]
   (and (not= @start-time nil) (not= @end-time nil)))
@@ -26,9 +26,9 @@
     (fn []
       [view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
        (when @start-time
-         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Went to lunch at " (time-format/unparse format @start-time)])
+         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Went to lunch at " (time-format/unparse format (time/to-default-time-zone @start-time))])
        (when @end-time
-         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Came back from lunch at " (time-format/unparse format @end-time)])
+         [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "Came back from lunch at " (time-format/unparse format (time/to-default-time-zone @end-time))])
        (when (lunch-complete? start-time end-time)
          [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}} "You were at lunch for " (time/in-minutes (time/interval @start-time @end-time)) " minutes"])
        [image {:source logo-img

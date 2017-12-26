@@ -3,19 +3,20 @@
             :url "http://example.com/FIXME"
             :license {:name "Eclipse Public License"
                       :url  "http://www.eclipse.org/legal/epl-v10.html"}
-            :dependencies [[org.clojure/clojure "1.9.0-alpha16"]
-                           [org.clojure/clojurescript "1.9.542"]
+            :dependencies [[org.clojure/clojure "1.9.0"]
+                           [org.clojure/clojurescript "1.9.946"]
+                           [cljs-ajax "0.7.3"]
                            [reagent "0.6.1" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server]]
-                           [re-frame "0.9.2"]
-                           [com.andrewmcveigh/cljs-time "0.5.0"]]
-            :plugins [[lein-cljsbuild "1.1.4"]
-                      [lein-figwheel "0.5.10"]]
+                           [re-frame "0.10.2"]
+                           [com.andrewmcveigh/cljs-time "0.5.2"]]
+            :plugins [[lein-cljsbuild "1.1.7"]
+                      [lein-figwheel "0.5.14"]]
             :clean-targets ["target/" "index.ios.js" "index.android.js" #_($PLATFORM_CLEAN$)]
             :aliases {"prod-build" ^{:doc "Recompile code with prod profile."}
                                    ["do" "clean"
                                     ["with-profile" "prod" "cljsbuild" "once"]]}
-            :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.10"]
-                                            [com.cemerick/piggieback "0.2.1"]]
+            :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.14"]
+                                            [com.cemerick/piggieback "0.2.2"]]
                              :source-paths ["src" "env/dev"]
                              :cljsbuild    {:builds [
                                                      {:id           "ios"

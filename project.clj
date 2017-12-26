@@ -6,6 +6,7 @@
             :dependencies [[org.clojure/clojure "1.9.0"]
                            [org.clojure/clojurescript "1.9.946"]
                            [cljs-ajax "0.7.3"]
+                           [day8.re-frame/http-fx "0.1.4"]
                            [reagent "0.6.1" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server]]
                            [re-frame "0.10.2"]
                            [com.andrewmcveigh/cljs-time "0.5.2"]]

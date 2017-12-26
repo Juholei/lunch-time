@@ -9,4 +9,6 @@
 ;; initial state of app-db
 (def app-db {:greeting "There's quite much crap in me"
              :start-time nil
-             :end-time nil})
+             :end-time nil
+             :error nil
+             :loading? false})

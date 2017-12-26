@@ -1,6 +1,9 @@
 (ns lunch-time.events
   (:require
-   [re-frame.core :refer [reg-event-db after]]
+   [ajax.core :as ajax]
+   [cljs-time.coerce :refer [to-long]]
+   [day8.re-frame.http-fx]
+   [re-frame.core :refer [reg-event-db reg-event-fx after]]
    [clojure.spec.alpha :as s]
    [lunch-time.db :as db :refer [app-db]]))
 
@@ -45,3 +48,30 @@
  ;validate-spec
  (fn [db [_ value]]
    (assoc db :end-time value)))
+
+(reg-event-db
+ :success-response
+ (fn [db [_ response]]
+   (println response)
+   (assoc db :loading? false)))
+
+(reg-event-db
+ :failure-response
+ (fn [db [_ response]]
+   (-> db
+     (assoc :loading? false)
+     (assoc :error response))))
+
+(reg-event-fx
+ :save-to-server
+ (fn
+   [{db :db} _]
+   {:http-xhrio {:method :post
+                 :params {:start (to-long (:start-time db))
+                          :end   (to-long (:end-time db))}
+                 :uri     "https://back.end.url/here"
+                 :format (ajax/transit-request-format)
+                 :response-format (ajax/transit-response-format)
+                 :on-success [:success-response]
+                 :on-failure [:failure-response]}
+    :db (assoc db :loading? true)}))

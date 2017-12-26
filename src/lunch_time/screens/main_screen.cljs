@@ -36,7 +36,8 @@
 
 (defn main-screen []
   (let [start-time (subscribe [:get-start-time])
-        end-time (subscribe [:get-end-time])]
+        end-time (subscribe [:get-end-time])
+        error (subscribe [:get-error])]
     (fn []
       [view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
        [image {:source logo-img
@@ -49,9 +50,12 @@
                      #(dispatch [:set-start-time (time/now)])
                      "Lunch time!"]
        [lunch-button (and @start-time (= @end-time nil))
-                     #(dispatch [:set-end-time (time/now)])
+                     #(do
+                        (dispatch [:set-end-time (time/now)])
+                        (dispatch [:save-to-server]))
                      "Back to work!"]
        [lunch-button (lunch-complete? start-time end-time)
                      #(do (dispatch [:set-end-time nil])
                           (dispatch [:set-start-time nil]))
-                     "Reset"]])))
+                     "Reset"]
+       [text text-style @error]])))

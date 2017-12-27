@@ -55,6 +55,11 @@
      (assoc :loading? false)
      (assoc :error response))))
 
+(reg-event-db
+ :clear-error
+ (fn [db _]
+   (assoc db :error nil)))
+
 (reg-event-fx
  :save-to-server
  (fn
@@ -62,7 +67,7 @@
    {:http-xhrio {:method :post
                  :params {:start (to-long (:start-time db))
                           :end   (to-long (:end-time db))}
-                 :uri     "https://back.end.url/here"
+                 :uri    "https://back.end.url/here"
                  :format (ajax/transit-request-format)
                  :response-format (ajax/transit-response-format)
                  :on-success [:success-response]

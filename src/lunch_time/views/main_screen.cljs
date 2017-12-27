@@ -3,6 +3,7 @@
             [re-frame.core :refer [subscribe dispatch]]
             [cljs-time.core :as time]
             [cljs-time.format :as time-format]
+            [lunch-time.rn-utils :as rn]
             [lunch-time.views.components.common :as c]
             [lunch-time.events]
             [lunch-time.subs]))
@@ -55,6 +56,8 @@
                      #(do (dispatch [:set-end-time nil])
                           (dispatch [:set-start-time nil]))
                      "Reset"]
-
-       [c/text text-style @error]
-       [c/progress-indicator @loading? "Sending lunch to server..."]])))
+       [c/progress-indicator @loading? "Sending lunch to server..."]
+       (when @error
+         (rn/alert "Error communicating with server"
+                   (str "Server returned status " (:status @error))
+                   [{:text "OK" :onPress #(dispatch [:clear-error])}]))])))

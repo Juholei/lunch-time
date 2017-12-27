@@ -66,3 +66,4 @@ figwheel_server.log
 .lein-repl-history
 .nrepl-port
 .re-natal
+.re-natal.local

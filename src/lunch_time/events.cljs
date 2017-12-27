@@ -64,12 +64,14 @@
  :save-to-server
  (fn
    [{db :db} _]
-   {:http-xhrio {:method :post
-                 :params {:start (to-long (:start-time db))
-                          :end   (to-long (:end-time db))}
-                 :uri    "https://back.end.url/here"
-                 :format (ajax/transit-request-format)
-                 :response-format (ajax/transit-response-format)
-                 :on-success [:success-response]
-                 :on-failure [:failure-response]}
-    :db (assoc db :loading? true)}))
+   (if-let [backend (:backend db)]
+     {:http-xhrio {:method :post
+                   :params {:start (to-long (:start-time db))
+                            :end   (to-long (:end-time db))}
+                   :uri backend
+                   :format (ajax/transit-request-format)
+                   :response-format (ajax/transit-response-format)
+                   :on-success [:success-response]
+                   :on-failure [:failure-response]}
+      :db (assoc db :loading? true)}
+     {:db db})))

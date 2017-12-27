@@ -1,5 +1,6 @@
 (ns lunch-time.db
-  (:require [clojure.spec.alpha :as s]))
+  (:require [clojure.spec.alpha :as s]
+            [lunch-time.config :as config]))
 
 ;; spec of app-db
 (s/def ::greeting string?)
@@ -11,4 +12,5 @@
              :start-time nil
              :end-time nil
              :error nil
-             :loading? false})
+             :loading? false
+             :backend config/backend})

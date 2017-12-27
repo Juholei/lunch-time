@@ -3,7 +3,7 @@
             [re-frame.core :refer [dispatch-sync]]
             [lunch-time.events]
             [lunch-time.subs]
-            [lunch-time.screens.main-screen :refer [main-screen]]))
+            [lunch-time.views.main-screen :refer [main-screen]]))
 
 (def ReactNative (js/require "react-native"))
 

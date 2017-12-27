@@ -15,3 +15,8 @@
   :get-error
   (fn [db _]
     (:error db)))
+
+(reg-sub
+ :get-loading
+ (fn [db _]
+   (:loading? db)))

@@ -32,12 +32,6 @@
    app-db))
 
 (reg-event-db
- :set-greeting
- validate-spec
- (fn [db [_ value]]
-   (assoc db :greeting value)))
-
-(reg-event-db
  :set-start-time
  ;validate-spec
  (fn [db [_ value]]
@@ -52,7 +46,6 @@
 (reg-event-db
  :success-response
  (fn [db [_ response]]
-   (println response)
    (assoc db :loading? false)))
 
 (reg-event-db

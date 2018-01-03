@@ -13,4 +13,5 @@
              :end-time nil
              :error nil
              :loading? false
-             :backend config/backend})
+             :backend config/backend
+             :secret config/secret})

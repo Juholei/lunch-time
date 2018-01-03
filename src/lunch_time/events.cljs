@@ -67,7 +67,8 @@
    (if-let [backend (:backend db)]
      {:http-xhrio {:method :post
                    :params {:start (to-long (:start-time db))
-                            :end   (to-long (:end-time db))}
+                            :end   (to-long (:end-time db))
+                            :request-secret (:secret db)}
                    :uri backend
                    :format (ajax/transit-request-format)
                    :response-format (ajax/transit-response-format)
